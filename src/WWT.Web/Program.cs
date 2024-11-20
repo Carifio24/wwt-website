@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -39,6 +40,14 @@ builder.Services.AddCors(options => options
 
 builder.Services.AddMvcCore();
 
+builder.Services.AddRequestTimeouts(options =>
+{
+    options.DefaultPolicy = new RequestTimeoutPolicy
+    {
+        Timeout = TimeSpan.FromSeconds(2)
+    };
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -50,6 +59,7 @@ app.UseCors();
 
 app.UseRouting();
 app.UseUserAgentFiltering();
+app.UseRequestTimeouts();
 
 app.MapWwt();
 

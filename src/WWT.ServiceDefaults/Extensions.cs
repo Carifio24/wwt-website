@@ -2,6 +2,7 @@ using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Timeouts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Http.Resilience;
@@ -35,6 +36,16 @@ public static class Extensions
 
             // Turn on service discovery by default
             http.AddServiceDiscovery();
+
+            // Add a default timeout policy
+            http.Services.AddRequestTimeouts(options =>
+            {
+                options.DefaultPolicy = new RequestTimeoutPolicy
+                {
+                    Timeout = TimeSpan.FromMicroseconds(2)
+                };
+            });
+
         });
 
         return builder;

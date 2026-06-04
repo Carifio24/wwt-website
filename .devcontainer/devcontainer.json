@@ -5,7 +5,10 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"build": {
 		"dockerfile": "Dockerfile",
-		"context": "."
+		"context": ".",
+		"options": [
+			"--platform=linux/amd64"
+		]
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},

@@ -5,6 +5,9 @@
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	// "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm",
 	"build": { "dockerfile": "Dockerfile" },
+	// Share the host network so the AppHost (inside this container) can reach the
+	// Redis/Azurite containers that docker-outside-of-docker starts on the host daemon.
+	"runArgs": ["--network=host"],
 	"features": {
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
 		"ghcr.io/joshuanianji/devcontainer-features/github-cli-persistence:1": {}
@@ -25,6 +28,9 @@
 	"postCreateCommand": "dotnet tool update -g linux-dev-certs --version 0.3.0 && dotnet linux-dev-certs install && dotnet restore",
 	"customizations": {
 		"vscode": {
+			// With --network=host the ports are already on the host; VS Code's forwarder
+			// would otherwise grab them and loop back onto itself.
+			"settings": { "remote.autoForwardPorts": false },
 			"extensions": [
 				"ms-dotnettools.csdevkit",
 				"GitHub.vscode-pull-request-github"

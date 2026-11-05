@@ -107,9 +107,12 @@ internal static class DataSeedExtensions
 
         public async Task UploadAsync(AzureBlobStorageResource resource, HttpClient httpClient, CancellationToken token)
         {
-            var blobClient = new BlobServiceClient(resource.ConnectionStringExpression.ValueExpression, new() { Transport = new HttpClientTransport(httpClient) });
+            var connectionString = await resource.ConnectionStringExpression.GetValueAsync(token)
+                ?? throw new InvalidOperationException($"No connection string available for {resource.Name}");
 
-            logger.LogInformation("Connecting to blob at {ConnectionString}", resource.ConnectionStringExpression.ValueExpression);
+            var blobClient = new BlobServiceClient(connectionString, new() { Transport = new HttpClientTransport(httpClient) });
+
+            logger.LogInformation("Connecting to blob at {Uri}", blobClient.Uri);
 
             using var fs = File.OpenRead(path);
             using var archive = new ZipArchive(fs, ZipArchiveMode.Read);

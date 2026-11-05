@@ -27,8 +27,8 @@ public static class WwtStartupExtensions
         MergeConfig(configuration, "MarsStorageAccount", "Mars");
         MergeConfig(configuration, "RedisConnectionString", "cache");
 
-        builder.AddKeyedAzureBlobClient("WwtFiles");
-        builder.AddKeyedAzureBlobClient("Mars");
+        builder.AddKeyedAzureBlobServiceClient("WwtFiles");
+        builder.AddKeyedAzureBlobServiceClient("Mars");
         builder.AddRedisDistributedCache("cache");
 
         builder.Services.AddSingleton<RecyclableMemoryStreamManager>();

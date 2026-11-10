@@ -28,7 +28,7 @@
 	// }
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "dotnet tool update -g linux-dev-certs && dotnet linux-dev-certs install",
+	"postCreateCommand": "dotnet tool update -g linux-dev-certs --version 0.3.0 && dotnet linux-dev-certs install && dotnet restore",
 	"customizations": {
 		"vscode": {
 			"extensions": [
